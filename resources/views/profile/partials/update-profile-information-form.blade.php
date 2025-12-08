@@ -46,6 +46,34 @@
                 </div>
             @endif
         </div>
+        <div class="mt-4">
+            <x-input-label for="title" :value="__('Título (ej. Full Stack Developer)')" />
+            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', $user->title)" />
+            <x-input-error class="mt-2" :messages="$errors->get('title')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="location" :value="__('Ubicación')" />
+            <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $user->location)" />
+            <x-input-error class="mt-2" :messages="$errors->get('location')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="skills" :value="__('Habilidades (Sepáralas por comas)')" />
+            <x-text-input id="skills" name="skills" type="text" class="mt-1 block w-full" 
+                :value="old('skills', $user->skills)" 
+                placeholder="PHP, Laravel, CSS, React" />
+            <p class="text-sm text-gray-500 mt-1">Escribe tus habilidades separadas por comas.</p>
+            <x-input-error class="mt-2" :messages="$errors->get('skills')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="bio" :value="__('Experiencia y Biografía')" />
+            <textarea id="bio" name="bio" rows="4" 
+                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                placeholder="Cuenta tu experiencia laboral aquí...">{{ old('bio', $user->bio) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

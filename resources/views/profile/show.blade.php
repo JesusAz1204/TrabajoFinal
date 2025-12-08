@@ -13,9 +13,9 @@
                 </div>
             </div>
 
-            <a href="#" class="rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700">
-                Editar Perfil
-            </a>
+<a href="{{ route('profile.edit') }}" class="rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700">
+    Editar Perfil
+</a>
         </div>
 
         <hr class="my-6">

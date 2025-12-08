@@ -26,13 +26,13 @@ class User extends Authenticatable
         'email',
         'password',
 
-        // Campos extra (Chaymba)
         'title',
         'location',
         'bio',
         'avatar_url',
         'skills',
     ];
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -86,9 +86,7 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    /**
-     * Transacciones del usuario.
-     */
+    
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
