@@ -39,9 +39,17 @@
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
+            <div class="flex items-center justify-end mt-6">
+            @if (Route::has('password.request'))
+                <a class="underline text-sm text-slate-500 hover:text-emerald-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
+
+            <button type="submit" class="ms-3 inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-xl font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 active:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 {{ __('Log in') }}
-            </x-primary-button>
+            </button>
+        </div>
         </div>
     </form>
 </x-guest-layout>
