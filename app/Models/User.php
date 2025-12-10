@@ -10,6 +10,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+// Asegúrate de que todos los modelos usados en las relaciones estén importados
+use App\Models\Course;
+use App\Models\Transaction; 
+use App\Models\Opportunity; 
+use App\Models\Message; 
 
 
 class User extends Authenticatable
@@ -17,15 +22,17 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Los atributos que se pueden asignar masivamente (Mass Assignable).
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        // ⭐ CORRECCIÓN: CAMPOS DE REGISTRO NECESARIOS ⭐
         'name',
         'email',
         'password',
 
+        // Tus campos de perfil
         'title',
         'location',
         'bio',
@@ -33,9 +40,8 @@ class User extends Authenticatable
         'skills',
     ];
     
-
     /**
-     * The attributes that should be hidden for serialization.
+     * Los atributos que deben ser ocultados para la serialización.
      *
      * @var array<int, string>
      */
@@ -45,7 +51,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Los atributos que deben ser casteados.
      *
      * @var array<string, string>
      */
@@ -86,6 +92,13 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    /**
+     * Cursos de formación/experiencia registrados por el usuario (HasMany).
+     */
+    public function courseRecords(): HasMany
+    {
+        return $this->hasMany(Course::class);
+    }
     
     public function transactions(): HasMany
     {
@@ -125,12 +138,13 @@ class User extends Authenticatable
         return Message::query()
             ->where(function ($q) use ($otherUserId) {
                 $q->where('sender_id', $this->id)
-                  ->where('receiver_id', $otherUserId);
+                    ->where('receiver_id', $otherUserId);
             })
             ->orWhere(function ($q) use ($otherUserId) {
                 $q->where('sender_id', $otherUserId)
-                  ->where('receiver_id', $this->id);
+                    ->where('receiver_id', $this->id);
             })
             ->orderBy('created_at');
+            
     }
 }

@@ -22,10 +22,8 @@ Route::view('/', 'welcome')->name('home');
 // Rutas protegidas (requiere login)
 Route::middleware(['auth'])->group(function () {
 
-
-Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-
-Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Dashboard (pantalla principal ya logueado)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -41,8 +39,11 @@ Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.up
     // Informes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-    // Cursos
+    // Cursos (CRUD Completo)
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::get('/courses/crear', [CourseController::class, 'create'])->name('courses.create');
+    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy'); // ⭐ NUEVA RUTA DELETE ⭐
 
     // Mi Perfil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
