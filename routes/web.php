@@ -9,6 +9,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +22,14 @@ use App\Http\Controllers\OpportunityController;
 Route::view('/', 'welcome')->name('home');
 
 // Rutas protegidas (requiere login)
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
 
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::post('/contacts/{user}', [ContactController::class, 'store'])->name('contacts.store');
+    Route::delete('/contacts/{user}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
     // Dashboard (pantalla principal ya logueado)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

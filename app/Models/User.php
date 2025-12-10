@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 // Asegúrate de que todos los modelos usados en las relaciones estén importados
 use App\Models\Course;
 use App\Models\Transaction; 
@@ -71,15 +72,21 @@ class User extends Authenticatable
      * Mis contactos (relación many-to-many consigo mismo).
      * Tabla: contacts (user_id, contact_id)
      */
+
+
+    
     public function contacts(): BelongsToMany
     {
-        return $this->belongsToMany(
-            User::class,
-            'contacts',
-            'user_id',
-            'contact_id'
-        )->withTimestamps();
+         return $this->belongsToMany(User::class, 'contacts', 'user_id', 'contact_id')
+        ->withTimestamps();
     }
+
+    public function contactedBy(): BelongsToMany
+{
+    // Quien me tiene agregado (otros -> yo)
+    return $this->belongsToMany(User::class, 'contacts', 'contact_id', 'user_id')
+        ->withTimestamps();
+}
 
     /**
      * Cursos inscritos (many-to-many).
@@ -147,4 +154,6 @@ class User extends Authenticatable
             ->orderBy('created_at');
             
     }
+
+    
 }
