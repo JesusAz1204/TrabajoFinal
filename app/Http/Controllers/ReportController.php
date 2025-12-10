@@ -20,10 +20,9 @@ $tx = $me->transactions()->orderByDesc('created_at')->get();
             ->where('amount', '>', 0)
             ->sum('amount');
 
-        // Puedes cambiar esto después por lógica real:
         $projectsCompleted = $me->opportunities()->count();
-        $proposalsSent = 35; // demo
-        $ratingAvg = 4.9;    // demo
+        $proposalsSent = 35; 
+        $ratingAvg = 4.9;    
 
         return view('reports.index', compact(
             'tx',

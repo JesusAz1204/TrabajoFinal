@@ -8,14 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // GET /users
     public function index(Request $request)
     {
          return view('users.index');
 
     }
 
-    // POST /users
     public function store(Request $request)
     {
         $data = $request->validate([

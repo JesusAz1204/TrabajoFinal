@@ -39,8 +39,7 @@ class MessageController extends Controller
             abort(403);
         }
 
-        // (Opcional) seguridad: solo permitir chats con contactos
-        // if (!$me->contacts()->whereKey($user->id)->exists()) abort(403);
+       
 
         $contacts = $me->contacts()->get();
 

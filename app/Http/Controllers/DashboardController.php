@@ -8,6 +8,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        return view('dashboard'); // aquí va tu vista del panel
+        return view('dashboard'); 
     }
 }

@@ -34,7 +34,7 @@ class ProfileController extends Controller
             'title' => ['nullable', 'string', 'max:120'],
             'location' => ['nullable', 'string', 'max:120'],
             'bio' => ['nullable', 'string', 'max:2000'],
-            'skills' => ['nullable', 'string', 'max:255'], // separado por comas
+            'skills' => ['nullable', 'string', 'max:255'], 
         ]);
 
         $user->name = $data['name'];
@@ -42,7 +42,6 @@ class ProfileController extends Controller
         $user->location = $data['location'] ?? null;
         $user->bio = $data['bio'] ?? null;
 
-        // skills: "PHP, Laravel, Tailwind" => ["PHP","Laravel","Tailwind"]
         $skills = collect(explode(',', $data['skills'] ?? ''))
             ->map(fn($s) => trim($s))
             ->filter()
