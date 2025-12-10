@@ -1,42 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex items-center justify-between gap-4">
-    <h1 class="text-3xl font-semibold">Mis Contactos</h1>
+<div class="container p-4 mx-auto">
 
-    <form class="flex items-center gap-2 rounded-xl border bg-white px-4 py-2 shadow-sm" method="GET">
-        <input name="q" value="{{ $q }}" class="w-64 border-0 outline-none" placeholder="Buscar contacto..." />
-        <button class="text-slate-500">🔎</button>
-    </form>
-</div>
+    @if (session('success'))
+        <div class="relative px-4 py-3 mb-4 text-green-700 bg-green-100 border border-green-400 rounded" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
 
-<div class="mt-8 grid gap-6 md:grid-cols-3">
-    @forelse($contacts as $c)
-        <div class="rounded-2xl border bg-white p-6 shadow-sm">
-            <div class="flex items-center justify-center">
-                <div class="h-16 w-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-semibold">
-                    {{ mb_substr($c->name,0,1) }}
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold">Mis Contactos</h1>
+        <a href="{{ route('contacts.create') }}" class="px-4 py-2 font-bold text-white bg-green-600 rounded hover:bg-green-700">
+            + Añadir Contacto
+        </a>
+    </div>
+
+    @if ($contacts->isEmpty())
+        <div class="p-6 text-center bg-white rounded-lg shadow-md">
+            <p class="text-xl font-semibold text-gray-700">¡Ups!</p>
+            <p class="mt-2 text-gray-600">No tienes contactos registrados aún. Haz clic en "Añadir Contacto" para enriquecer tu perfil.</p>
+        </div>
+    @else
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ($contacts as $contact)
+                <div class="p-6 bg-white border-t-4 border-green-500 rounded-lg shadow-md">
+                    <h2 class="mb-2 text-xl font-bold text-gray-800">{{ $contact->name }}</h2>
+                    @if ($contact->phone)
+                        <p class="text-gray-600">📞 Teléfono: {{ $contact->phone }}</p>
+                    @endif
+                    @if ($contact->email)
+                        <p class="text-gray-600">📧 Email: {{ $contact->email }}</p>
+                    @endif
+                    @if ($contact->company)
+                        <p class="text-gray-600">🏢 Empresa: {{ $contact->company }}</p>
+                    @endif
+                    
+                    <div class="flex items-center gap-4 mt-4">
+                        <a href="{{ route('contacts.edit', $contact) }}" 
+                           class="text-sm text-blue-600 hover:text-blue-800 focus:outline-none">
+                            Editar
+                        </a>
+                        <form action="{{ route('contacts.destroy', $contact) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('¿Estás seguro de que quieres eliminar este contacto?')"
+                                    class="text-sm text-red-600 hover:text-red-800 focus:outline-none">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-
-            <div class="mt-4 text-center">
-                <div class="text-lg font-semibold">{{ $c->name }}</div>
-                <div class="text-sm text-slate-500">{{ $c->title ?? 'Contacto' }} - {{ $c->location ?? '—' }}</div>
-            </div>
-
-            <div class="mt-5 space-y-2">
-                <a href="{{ route('messages.show', $c) }}" class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">
-                    ✈️ Enviar Mensaje
-                </a>
-                <a href="{{ route('profile.show') }}" class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-2 font-medium text-slate-700 hover:bg-slate-200">
-                    👤 Ver Perfil
-                </a>
-            </div>
+            @endforeach
         </div>
-    @empty
-        <div class="col-span-full rounded-2xl border bg-white p-6 text-slate-600">
-            No tienes contactos aún.
-        </div>
-    @endforelse
+    @endif
 </div>
 @endsection

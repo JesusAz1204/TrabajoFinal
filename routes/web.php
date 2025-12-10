@@ -16,42 +16,37 @@ use App\Http\Controllers\OpportunityController;
 |--------------------------------------------------------------------------
 */
 
-// Home público (tu diseño "Oportunidades Flexibles")
 Route::view('/', 'welcome')->name('home');
 
-// Rutas protegidas (requiere login)
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    // Dashboard (pantalla principal ya logueado)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Contactos
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/crear', [ContactController::class, 'create'])->name('contacts.create');
+    Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
+    Route::get('/contacts/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
+    Route::patch('/contacts/{contact}', [ContactController::class, 'update'])->name('contacts.update');
+    Route::delete('/contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
-    // Mensajes (chat)
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::get('/messages/{user}', [MessageController::class, 'show'])->name('messages.show');
     Route::post('/messages/{user}', [MessageController::class, 'store'])->name('messages.store');
 
-    // Informes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-    // Cursos (CRUD Completo)
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/crear', [CourseController::class, 'create'])->name('courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
-    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy'); // ⭐ NUEVA RUTA DELETE ⭐
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
-    // Mi Perfil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-    // Publicar Oportunidad
     Route::get('/opportunities/create', [OpportunityController::class, 'create'])->name('opportunities.create');
     Route::post('/opportunities', [OpportunityController::class, 'store'])->name('opportunities.store');
 });
 
-// Rutas de autenticación Breeze (login/register/logout)
 require __DIR__ . '/auth.php';

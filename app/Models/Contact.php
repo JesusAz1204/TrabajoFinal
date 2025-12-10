@@ -6,25 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Course extends Model
+class Contact extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'name',
+        'phone',
+        'email',
+        'company',
+        'notes',
         'user_id',
-        'nombre',       
-        'institucion',  
-        'fecha_inicio', 
-        'fecha_fin',    
-        
-        'category',
-        'instructor',
-        'image_url',
-    ];
-
-    protected $casts = [
-        'fecha_inicio' => 'date',
-        'fecha_fin' => 'date',
     ];
     
     public function user(): BelongsTo

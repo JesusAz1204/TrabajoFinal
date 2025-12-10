@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,29 +9,30 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-// Asegúrate de que todos los modelos usados en las relaciones estén importados
 use App\Models\Course;
 use App\Models\Transaction; 
 use App\Models\Opportunity; 
 use App\Models\Message; 
+use App\Models\Contact;
 
-
+/**
+ * App\Models\User
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $platformContacts 
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Course> $courses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Course> $courseRecords
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaction> $transactions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Opportunity> $opportunities
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Los atributos que se pueden asignar masivamente (Mass Assignable).
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        // ⭐ CORRECCIÓN: CAMPOS DE REGISTRO NECESARIOS ⭐
         'name',
         'email',
         'password',
-
-        // Tus campos de perfil
         'title',
         'location',
         'bio',
@@ -40,38 +40,27 @@ class User extends Authenticatable
         'skills',
     ];
     
-    /**
-     * Los atributos que deben ser ocultados para la serialización.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Los atributos que deben ser casteados.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-
-        // Skills se guarda como JSON (array)
         'skills' => 'array',
     ];
 
     /* ===========================
-     | Relaciones (Chaymba)
-     |===========================*/
+    | Relaciones (Chaymba)
+    |===========================*/
 
-    /**
-     * Mis contactos (relación many-to-many consigo mismo).
-     * Tabla: contacts (user_id, contact_id)
-     */
-    public function contacts(): BelongsToMany
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(Contact::class);
+    }
+    
+    public function platformContacts(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -81,10 +70,6 @@ class User extends Authenticatable
         )->withTimestamps();
     }
 
-    /**
-     * Cursos inscritos (many-to-many).
-     * Tabla pivot: course_user (user_id, course_id, progress, completed_at)
-     */
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class)
@@ -92,9 +77,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    /**
-     * Cursos de formación/experiencia registrados por el usuario (HasMany).
-     */
     public function courseRecords(): HasMany
     {
         return $this->hasMany(Course::class);
@@ -105,34 +87,21 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
-    /**
-     * Oportunidades publicadas por el usuario.
-     */
     public function opportunities(): HasMany
     {
         return $this->hasMany(Opportunity::class);
     }
 
-    /**
-     * Mensajes enviados por el usuario.
-     */
     public function sentMessages(): HasMany
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
 
-    /**
-     * Mensajes recibidos por el usuario.
-     */
     public function receivedMessages(): HasMany
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
-    /**
-     * Conversación con otro usuario (helper).
-     * Uso: auth()->user()->conversationWith($userId)->get();
-     */
     public function conversationWith(int $otherUserId)
     {
         return Message::query()
