@@ -13,7 +13,7 @@ use App\Models\Course;
 use App\Models\Transaction; 
 use App\Models\Opportunity; 
 use App\Models\Message; 
-use App\Models\Contact;
+use App\Models\Contact; // <-- Importación crucial
 
 /**
  * App\Models\User
