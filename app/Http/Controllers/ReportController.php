@@ -14,7 +14,7 @@ class ReportController extends Controller
             abort(403);
         }
 
-        $tx = $me->transactions()->latest('occurred_at')->get();
+$tx = $me->transactions()->orderByDesc('created_at')->get();
 
         $incomeTotal = $tx->where('status', 'completed')
             ->where('amount', '>', 0)
